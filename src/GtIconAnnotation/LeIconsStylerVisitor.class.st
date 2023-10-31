@@ -43,14 +43,25 @@ LeIconsStylerVisitor >> styleAutoHidingAnnotation: anIconAnnotation [
 
 { #category : #generated }
 LeIconsStylerVisitor >> styleButton: anIconAnnotation [
-	| attribute |
-	attribute := GtButtonAttribute new
-			beAppend;
-			stencil: BrGlamorousVectorIcons rustLogo.
-	self text
-		attribute: attribute
-		from: anIconAnnotation parent startPosition
-		to: anIconAnnotation parent stopPosition
+	| attribute height |
+	height := (([ (anIconAnnotation // 'HeightArgument') anyOne ]
+			on: CollectionIsEmpty
+			do: [ nil ])
+			ifNotNil: [ :aHeight | aHeight value source asInteger ]
+			ifNil: [ 16 ]) beBetween: 16 and: 64.
+	([ (anIconAnnotation // 'SelectorArgument') anyOne ]
+		on: CollectionIsEmpty
+		do: [ nil ])
+		ifNotNil: [ :aSelector | 
+			(BrGlamorousVectorIcons respondsTo: aSelector value source asSymbol)
+				ifTrue: [ attribute := GtButtonAttribute new
+							beAppend;
+							stencil: [ (BrGlamorousVectorIcons perform: aSelector value source asSymbol) asElement
+									asScalableElement size: height @ height ].
+					self text
+						attribute: attribute
+						from: anIconAnnotation parent startPosition
+						to: anIconAnnotation parent stopPosition ] ]
 ]
 
 { #category : #generated }
@@ -78,7 +89,7 @@ LeIconsStylerVisitor >> styleExpandingObject: anExternalFileReferenceAnnotation 
 
 { #category : #generated }
 LeIconsStylerVisitor >> visitAnnotation: anIconAnnotation [
-	anIconAnnotation logToPackageBeacon.
+	"anIconAnnotation logToPackageBeacon."
 	"self styleAnnotation: anIconAnnotation."
 	self styleAutoHidingAnnotation: anIconAnnotation.
 	self styleButton: anIconAnnotation.
