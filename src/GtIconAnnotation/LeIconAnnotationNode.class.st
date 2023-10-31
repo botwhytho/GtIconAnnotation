@@ -3,7 +3,7 @@ Class {
 	#superclass : #LeIconParseNode,
 	#instVars : [
 		'items',
-		'bars'
+		'bar'
 	],
 	#category : #GtIconAnnotation
 }
@@ -14,13 +14,13 @@ LeIconAnnotationNode >> acceptVisitor: aParseVisitor [
 ]
 
 { #category : #generated }
-LeIconAnnotationNode >> bars [
-	^ bars
+LeIconAnnotationNode >> bar [
+	^ bar
 ]
 
 { #category : #generated }
-LeIconAnnotationNode >> bars: anOrderedCollection [
-	bars := anOrderedCollection
+LeIconAnnotationNode >> bar: aSmaCCToken [
+	bar := aSmaCCToken
 ]
 
 { #category : #generated }
@@ -28,16 +28,10 @@ LeIconAnnotationNode >> compositeNodeVariables [
 	^ #(#items)
 ]
 
-{ #category : #generated }
-LeIconAnnotationNode >> compositeTokenVariables [
-	^ #(#bars)
-]
-
 { #category : #'generated-initialize-release' }
 LeIconAnnotationNode >> initialize [
 	super initialize.
 	items := OrderedCollection new: 2.
-	bars := OrderedCollection new: 2.
 ]
 
 { #category : #generated }
@@ -50,4 +44,9 @@ LeIconAnnotationNode >> items: anOrderedCollection [
 	self setParents: self items to: nil.
 	items := anOrderedCollection.
 	self setParents: self items to: self
+]
+
+{ #category : #generated }
+LeIconAnnotationNode >> tokenVariables [
+	^ #(#bar)
 ]
