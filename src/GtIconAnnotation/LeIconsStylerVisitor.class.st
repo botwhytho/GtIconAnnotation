@@ -77,7 +77,8 @@ LeIconsStylerVisitor >> styleExpandingObject: anExternalFileReferenceAnnotation 
 ]
 
 { #category : #generated }
-LeIconsStylerVisitor >> visitIconAnnotation: anIconAnnotation [
+LeIconsStylerVisitor >> visitAnnotation: anIconAnnotation [
+	anIconAnnotation logToPackageBeacon.
 	"self styleAnnotation: anIconAnnotation."
 	self styleAutoHidingAnnotation: anIconAnnotation.
 	self styleButton: anIconAnnotation.

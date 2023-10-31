@@ -6,6 +6,11 @@ Trait {
 }
 
 { #category : #generated }
+TLeIconParseNodeVisitor >> visitAnnotation: anAnnotation [
+	^ self visitParse: anAnnotation
+]
+
+{ #category : #generated }
 TLeIconParseNodeVisitor >> visitArgument: anArgument [
 	^ self visitParse: anArgument
 ]
@@ -13,11 +18,6 @@ TLeIconParseNodeVisitor >> visitArgument: anArgument [
 { #category : #generated }
 TLeIconParseNodeVisitor >> visitHeightArgument: aHeightArgument [
 	^ self visitArgument: aHeightArgument
-]
-
-{ #category : #generated }
-TLeIconParseNodeVisitor >> visitIconAnnotation: anIconAnnotation [
-	^ self visitParse: anIconAnnotation
 ]
 
 { #category : #generated }

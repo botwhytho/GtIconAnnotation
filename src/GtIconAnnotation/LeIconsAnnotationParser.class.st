@@ -6,7 +6,7 @@ Class {
 
 { #category : #'generated-accessing' }
 LeIconsAnnotationParser class >> cacheId [
-	^'2023-10-30T22:58:18.25226-04:00'
+	^'2023-10-31T00:06:34.839854-04:00'
 ]
 
 { #category : #generated }
@@ -29,7 +29,7 @@ LeIconsAnnotationParser class >> definitionComment [
 	: (<isLetter> | _ ) ( <isLetter> | _ | <isDigit> ) *
 	;
 
-IconAnnotation 
+Annotation 
 	: Item 'item' (""|"" 'bar' Item 'item')* ""|"" 'bar'? {{}}
 	;
 Item
@@ -50,7 +50,7 @@ LeIconsAnnotationParser class >> initialize [
 	super initialize.
 	LeParser annotationParsers
 		at: 'gtIcon'
-		put: [ :parser | parser spawnParser: self startingAt: self startingStateForIconAnnotation ]
+		put: [ :parser | parser spawnParser: self startingAt: self startingStateForAnnotation ]
 ]
 
 { #category : #initialization }
@@ -62,16 +62,16 @@ LeIconsAnnotationParser class >> obsolete [
 { #category : #generated }
 LeIconsAnnotationParser class >> reduceTable [
 ^#(
-	#(12 1 #reduceActionForSelector1: 318465 false) 
-	#(10 0 #reduceActionFor______bar__Item__item___1: 242689 false) 
-	#(11 1 #liftFirstValue: 287745 false) 
-	#(11 1 #liftFirstValue: 287746 false) 
-	#(8 2 #reduceActionForIconAnnotation1: 210945 false) 
-	#(13 3 #reduceActionForHeight1: 463873 false) 
-	#(12 3 #reduceActionForSelector2: 318466 false) 
-	#(8 3 #reduceActionForIconAnnotation2: 210946 false) 
-	#(10 2 #reduceActionFor______bar__Item__item___2: 242690 false) 
-	#(9 2 #reduceActionFor______bar__Item__item__1: 242689 false)
+	#(12 1 #reduceActionForSelector1: 314369 false) 
+	#(10 0 #reduceActionFor______bar__Item__item___1: 238593 false) 
+	#(11 1 #liftFirstValue: 283649 false) 
+	#(11 1 #liftFirstValue: 283650 false) 
+	#(8 2 #reduceActionForAnnotation1: 210945 false) 
+	#(13 3 #reduceActionForHeight1: 459777 false) 
+	#(12 3 #reduceActionForSelector2: 314370 false) 
+	#(8 3 #reduceActionForAnnotation2: 210946 false) 
+	#(10 2 #reduceActionFor______bar__Item__item___2: 238594 false) 
+	#(9 2 #reduceActionFor______bar__Item__item__1: 238593 false)
 	).
 ]
 
@@ -81,18 +81,18 @@ LeIconsAnnotationParser class >> scannerClass [
 ]
 
 { #category : #generated }
-LeIconsAnnotationParser class >> startingStateForIconAnnotation [
+LeIconsAnnotationParser class >> startingStateForAnnotation [
 	^ 1
 ]
 
 { #category : #generated }
 LeIconsAnnotationParser class >> symbolNames [
-	^ #('"="' '"height"' '"selector"' '"|"' '<integer>' '<unarySelector>' 'B e g i n' 'IconAnnotation' '("|" ''bar'' Item ''item'')' '("|" ''bar'' Item ''item'')*' 'Item' 'Selector' 'Height' 'E O F' 'error')
+	^ #('"="' '"height"' '"selector"' '"|"' '<integer>' '<unarySelector>' 'B e g i n' 'Annotation' '("|" ''bar'' Item ''item'')' '("|" ''bar'' Item ''item'')*' 'Item' 'Selector' 'Height' 'E O F' 'error')
 ]
 
 { #category : #generated }
 LeIconsAnnotationParser class >> symbolTypes [
-	^ #(#SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #LeIconIconAnnotationNode #LeIconIconAnnotationNode #OrderedCollection #OrderedCollection #LeIconArgumentNode #LeIconSelectorArgumentNode #LeIconHeightArgumentNode #SmaCCToken #SmaCCErrorNode)
+	^ #(#SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #LeIconAnnotationNode #LeIconAnnotationNode #OrderedCollection #OrderedCollection #LeIconArgumentNode #LeIconSelectorArgumentNode #LeIconHeightArgumentNode #SmaCCToken #SmaCCErrorNode)
 ]
 
 { #category : #generated }
@@ -118,33 +118,33 @@ LeIconsAnnotationParser class >> transitionTable [
 ]
 
 { #category : #'generated-reduction actions' }
+LeIconsAnnotationParser >> reduceActionForAnnotation1: nodes [
+	| result |
+	result := LeIconAnnotationNode new.
+	result addNode: (nodes at: 1) to: result items.
+	result addTokens: ((nodes at: 2) at: 1) to: result bars.
+	result addNodes: ((nodes at: 2) at: 2) to: result items.
+	^ result
+]
+
+{ #category : #'generated-reduction actions' }
+LeIconsAnnotationParser >> reduceActionForAnnotation2: nodes [
+	| result |
+	result := LeIconAnnotationNode new.
+	result addNode: (nodes at: 1) to: result items.
+	result addTokens: ((nodes at: 2) at: 1) to: result bars.
+	result addNodes: ((nodes at: 2) at: 2) to: result items.
+	result addToken: (nodes at: 3) to: result bars.
+	^ result
+]
+
+{ #category : #'generated-reduction actions' }
 LeIconsAnnotationParser >> reduceActionForHeight1: nodes [
 	| result |
 	result := LeIconHeightArgumentNode new.
 	result name: (nodes at: 1).
 	result equals: (nodes at: 2).
 	result value: (nodes at: 3).
-	^ result
-]
-
-{ #category : #'generated-reduction actions' }
-LeIconsAnnotationParser >> reduceActionForIconAnnotation1: nodes [
-	| result |
-	result := LeIconIconAnnotationNode new.
-	result addNode: (nodes at: 1) to: result items.
-	result addTokens: ((nodes at: 2) at: 1) to: result bars.
-	result addNodes: ((nodes at: 2) at: 2) to: result items.
-	^ result
-]
-
-{ #category : #'generated-reduction actions' }
-LeIconsAnnotationParser >> reduceActionForIconAnnotation2: nodes [
-	| result |
-	result := LeIconIconAnnotationNode new.
-	result addNode: (nodes at: 1) to: result items.
-	result addTokens: ((nodes at: 2) at: 1) to: result bars.
-	result addNodes: ((nodes at: 2) at: 2) to: result items.
-	result addToken: (nodes at: 3) to: result bars.
 	^ result
 ]
 

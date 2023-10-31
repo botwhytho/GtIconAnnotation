@@ -1,5 +1,5 @@
 Class {
-	#name : #LeIconIconAnnotationNode,
+	#name : #LeIconAnnotationNode,
 	#superclass : #LeIconParseNode,
 	#instVars : [
 		'items',
@@ -9,44 +9,44 @@ Class {
 }
 
 { #category : #generated }
-LeIconIconAnnotationNode >> acceptVisitor: aParseVisitor [
-	^ aParseVisitor visitIconAnnotation: self
+LeIconAnnotationNode >> acceptVisitor: aParseVisitor [
+	^ aParseVisitor visitAnnotation: self
 ]
 
 { #category : #generated }
-LeIconIconAnnotationNode >> bars [
+LeIconAnnotationNode >> bars [
 	^ bars
 ]
 
 { #category : #generated }
-LeIconIconAnnotationNode >> bars: anOrderedCollection [
+LeIconAnnotationNode >> bars: anOrderedCollection [
 	bars := anOrderedCollection
 ]
 
 { #category : #generated }
-LeIconIconAnnotationNode >> compositeNodeVariables [
+LeIconAnnotationNode >> compositeNodeVariables [
 	^ #(#items)
 ]
 
 { #category : #generated }
-LeIconIconAnnotationNode >> compositeTokenVariables [
+LeIconAnnotationNode >> compositeTokenVariables [
 	^ #(#bars)
 ]
 
 { #category : #'generated-initialize-release' }
-LeIconIconAnnotationNode >> initialize [
+LeIconAnnotationNode >> initialize [
 	super initialize.
 	items := OrderedCollection new: 2.
 	bars := OrderedCollection new: 2.
 ]
 
 { #category : #generated }
-LeIconIconAnnotationNode >> items [
+LeIconAnnotationNode >> items [
 	^ items
 ]
 
 { #category : #generated }
-LeIconIconAnnotationNode >> items: anOrderedCollection [
+LeIconAnnotationNode >> items: anOrderedCollection [
 	self setParents: self items to: nil.
 	items := anOrderedCollection.
 	self setParents: self items to: self
