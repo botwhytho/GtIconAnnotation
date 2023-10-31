@@ -17,12 +17,12 @@ LeIconsAnnotationScanner class >> initializeKeywordMap [
 
 { #category : #generated }
 LeIconsAnnotationScanner >> emptySymbolTokenId [
-	^ 14
+	^ 13
 ]
 
 { #category : #generated }
 LeIconsAnnotationScanner >> errorTokenId [
-	^ 15
+	^ 14
 ]
 
 { #category : #generated }
