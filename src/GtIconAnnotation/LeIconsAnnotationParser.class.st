@@ -45,6 +45,20 @@ Height
 	;"
 ]
 
+{ #category : #initialization }
+LeIconsAnnotationParser class >> initialize [
+	super initialize.
+	LeParser annotationParsers
+		at: 'gtIcon'
+		put: [ :parser | parser spawnParser: self startingAt: self startingStateForIconAnnotation ]
+]
+
+{ #category : #initialization }
+LeIconsAnnotationParser class >> obsolete [
+	LeParser annotationParsers removeKey: 'gtIcon' ifAbsent: [  ].
+	^ super obsolete
+]
+
 { #category : #generated }
 LeIconsAnnotationParser class >> reduceTable [
 ^#(
