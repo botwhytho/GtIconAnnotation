@@ -95,10 +95,48 @@ LeIconsStylerVisitor >> styleExpandingObject: anExternalFileReferenceAnnotation 
 ]
 
 { #category : #generated }
+LeIconsStylerVisitor >> styleHeightCursorAttribute: anIconAnnotation [
+	| first last |
+	first := anIconAnnotation bar
+			ifNil: [ anIconAnnotation bar stopPosition ]
+			ifNotNil: [ anIconAnnotation parent
+					in: [ :aParent | 
+						aParent startPosition + aParent left size + aParent name size
+							+ aParent colon size ] ].
+	last := anIconAnnotation parent right startPosition.
+	self text
+		attribute: (BrTextCursorAttribute new
+				enterAction: [ :editor | 'entered height' logToPackageBeacon ];
+				leaveAction: [ :editor | 'left height' logToPackageBeacon ])
+		from: first
+		to: last
+]
+
+{ #category : #generated }
+LeIconsStylerVisitor >> styleSelectorCursorAttribute: anIconAnnotation [
+	| first last |
+	first := anIconAnnotation parent
+			in: [ :aParent | 
+				aParent startPosition + aParent left size + aParent name size
+					+ aParent colon size - 1 ].
+	last := anIconAnnotation bar
+			ifNil: [ anIconAnnotation bar startPosition ]
+			ifNotNil: [ anIconAnnotation parent right startPosition ].
+	self text
+		attribute: (BrTextCursorAttribute new
+				enterAction: [ :editor | 'entered selector' logToPackageBeacon ];
+				leaveAction: [ :editor | 'left selector' logToPackageBeacon ])
+		from: first
+		to: last
+]
+
+{ #category : #generated }
 LeIconsStylerVisitor >> visitAnnotation: anIconAnnotation [
-	"anIconAnnotation logToPackageBeacon."
+	anIconAnnotation logToPackageBeacon.
 	"self styleAnnotation: anIconAnnotation."
 	self styleAutoHidingAnnotation: anIconAnnotation.
+	self styleSelectorCursorAttribute: anIconAnnotation.
+	self styleHeightCursorAttribute: anIconAnnotation.
 	self styleButton: anIconAnnotation.
 	"self styleExpandingObject: anIconAnnotation"
 ]
