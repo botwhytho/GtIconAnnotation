@@ -19,3 +19,19 @@ LeIconsAnnotationCompletionVisitor class >> obsolete [
 		ifAbsent: [  ].
 	^ super obsolete
 ]
+
+{ #category : #generated }
+LeIconsAnnotationCompletionVisitor >> visitAnnotation: anAnnotation [
+	| first last completion isCursorInside |
+	anAnnotation items size < 2 ifTrue: [ ^ self visitArgument: anAnnotation ].
+	first := anAnnotation items second startPosition.
+	last := anAnnotation items second stopPosition + 1.
+	
+	isCursorInside := self composite position >= first and: [ self composite position < last ].
+	
+	isCursorInside ifFalse: [ ^ self visitArgument: anAnnotation ].
+			
+	completion := LeIconCompletionResult forHeight: (first to: last).
+	'completion got trigerred?' logToPackageBeacon.
+	^ self composite completionResult: completion
+]
