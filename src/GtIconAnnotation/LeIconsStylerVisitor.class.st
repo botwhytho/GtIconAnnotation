@@ -43,7 +43,12 @@ LeIconsStylerVisitor >> styleAutoHidingAnnotation: anIconAnnotation [
 
 { #category : #generated }
 LeIconsStylerVisitor >> styleButton: anIconAnnotation [
-	| attribute height |
+	| attribute errorAtribute height |
+	errorAtribute := GtButtonAttribute new
+			beAppend;
+			stencil: [ BrButton new
+					aptitude: BrGlamorousButtonWithIconAptitude;
+					icon: (BrGlamorousVectorIcons debug asElement background: LepiterConstants errorColor) ].
 	height := (([ (anIconAnnotation // 'HeightArgument') anyOne ]
 			on: CollectionIsEmpty
 			do: [ nil ])
@@ -57,11 +62,13 @@ LeIconsStylerVisitor >> styleButton: anIconAnnotation [
 				ifTrue: [ attribute := GtButtonAttribute new
 							beAppend;
 							stencil: [ (BrGlamorousVectorIcons perform: aSelector value source asSymbol) asElement
-									asScalableElement size: height @ height ].
-					self text
-						attribute: attribute
-						from: anIconAnnotation parent startPosition
-						to: anIconAnnotation parent stopPosition ] ]
+									asScalableElement size: height @ height ] ]
+				ifFalse: [ attribute := errorAtribute ] ]
+		ifNil: [ attribute := errorAtribute ].
+	self text
+		attribute: attribute
+		from: anIconAnnotation parent startPosition
+		to: anIconAnnotation parent stopPosition
 ]
 
 { #category : #generated }
