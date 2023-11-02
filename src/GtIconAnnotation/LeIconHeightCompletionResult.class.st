@@ -1,5 +1,5 @@
 Class {
-	#name : #LeIconCompletionResult,
+	#name : #LeIconHeightCompletionResult,
 	#superclass : #GtCompletionResult,
 	#instVars : [
 		'interval'
@@ -8,29 +8,29 @@ Class {
 }
 
 { #category : #'instance creation' }
-LeIconCompletionResult class >> forHeight: anInterval [
+LeIconHeightCompletionResult class >> forHeight: anInterval [
 	^ self new
 		interval: anInterval;
 		yourself
 ]
 
 { #category : #accessing }
-LeIconCompletionResult >> actionForEntity: anInteger [
+LeIconHeightCompletionResult >> actionForEntity: anInteger [
 	| insertionAction text |
-	text := 'height=', anInteger asString.
+	text := 'height=', anInteger asString , '}}'.
 	insertionAction := GtInsertTextCompletionAction
 		labeled: text
 		completion: text
-		position: self interval first - 1
-		from: self interval first - 1.
-	self interval last > self interval first
+		position: self interval first first - 1
+		from: self interval first first - 1.
+	self interval first last > self interval first first
 		ifTrue:
 			[ ^ (GtCompositeCompletionAction labeled: text)
 				addAction:
 						(GtDeleteTextCompletionAction
 								labeled: text
-								from: self interval first
-								to: self interval last - 1);
+								from: self interval first first
+								to: self interval first last + 1);
 				addAction: insertionAction ].
 	^ insertionAction
 	
@@ -38,14 +38,14 @@ LeIconCompletionResult >> actionForEntity: anInteger [
 ]
 
 { #category : #accessing }
-LeIconCompletionResult >> hasCompletionActions [
+LeIconHeightCompletionResult >> hasCompletionActions [
 	"This was needed for completion to appear. Same implementation as GtCalendarCompletionResult"
 	^ true
 ]
 
 { #category : #accessing }
-LeIconCompletionResult >> heightSLiderElement: someArgs [
-	| aController aDropdown horizontalPane rust container label check verticalPane line slider |
+LeIconHeightCompletionResult >> heightSLiderElement: someArgs [
+	| aController aDropdown horizontalPane icon container label check verticalPane line slider |
 	aController := someArgs first.
 	aDropdown := someArgs second.
 	line := BlElement new
@@ -56,27 +56,26 @@ LeIconCompletionResult >> heightSLiderElement: someArgs [
 			when: BlPullEvent
 				do: [ | height |
 					height := 16 + (48 * (slider position x / line width)) asFloat roundUpTo: 1.
-					rust size: height @ height.
+					icon size: height @ height.
 					label text: height ].
 	container := BlElement new
 			addChild: (line relocate: 8 @ 12) as: #line;
 			addChild: (slider relocate: 6 @ 4) as: #slider;
 			size: 256 @ 16 + 8;
 			padding: 16.
-	rust := BrGlamorousVectorIcons largeRustLogo asElement asScalableElement
-			size: 16 @ 16.
+	icon := ([ BrGlamorousVectorIcons perform: self interval last ]
+			on: Error
+			do: [ BrGlamorousVectorIcons gt ]) asElement asScalableElement size: 16 @ 16.
 	check := BrButton new
 			margin: (BlInsets all: 8);
 			aptitude: BrGlamorousButtonWithIconAptitude;
 			icon: BrGlamorousVectorIcons accept;
 			action: [ | task |
-			task := [ 
-					| completionAction |
+				task := [ | completionAction |
 					completionAction := self actionForEntity: label text.
 					aController completeWithAction: completionAction ] asBlTask.
-			(aController instVarNamed: #textElement) enqueueTask: task.
-			aDropdown fireEvent: BrDropdownHideWish new.
-			 ].
+				(aController instVarNamed: #textElement) enqueueTask: task.
+				aDropdown fireEvent: BrDropdownHideWish new ].
 	label := BrLabel new
 			aptitude: BrGlamorousLabelAptitude;
 			text: 16.
@@ -85,7 +84,7 @@ LeIconCompletionResult >> heightSLiderElement: someArgs [
 			fitContent;
 			alignCenter;
 			addChildren: {container.
-					rust}.
+					icon}.
 	horizontalPane := BrHorizontalPane new
 			fitContent;
 			aptitude: BrShadowAptitude new;
@@ -102,19 +101,19 @@ LeIconCompletionResult >> heightSLiderElement: someArgs [
 ]
 
 { #category : #accessing }
-LeIconCompletionResult >> interval [
+LeIconHeightCompletionResult >> interval [
 
 	^ interval
 ]
 
 { #category : #accessing }
-LeIconCompletionResult >> interval: anObject [
+LeIconHeightCompletionResult >> interval: anObject [
 
 	interval := anObject
 ]
 
 { #category : #accessing }
-LeIconCompletionResult >> newHeightSliderFor: aController [
+LeIconHeightCompletionResult >> newHeightSliderFor: aController [
 	| aButton aWithDropdownLook |
 	aWithDropdownLook := BrGlamorousWithDropdownAptitude
 			handle: [ BrButton new
@@ -130,7 +129,7 @@ LeIconCompletionResult >> newHeightSliderFor: aController [
 ]
 
 { #category : #accessing }
-LeIconCompletionResult >> showOn: aController [
+LeIconHeightCompletionResult >> showOn: aController [
 	| element showTask |
 	element := self newHeightSliderFor: aController.
 	aController popupElement: element.

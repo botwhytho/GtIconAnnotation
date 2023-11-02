@@ -95,7 +95,7 @@ LeIconsStylerVisitor >> styleExpandingObject: anExternalFileReferenceAnnotation 
 ]
 
 { #category : #generated }
-LeIconsStylerVisitor >> styleHeightCursorAttribute: anIconAnnotation [
+LeIconsStylerVisitor >> styleHeightCursorAttribute2: anIconAnnotation [
 	| first last |
 	first := anIconAnnotation bar
 			ifNil: [ anIconAnnotation bar stopPosition ]
@@ -113,7 +113,26 @@ LeIconsStylerVisitor >> styleHeightCursorAttribute: anIconAnnotation [
 ]
 
 { #category : #generated }
-LeIconsStylerVisitor >> styleSelectorCursorAttribute: anIconAnnotation [
+LeIconsStylerVisitor >> styleHeightCursorAttribute: aHeightArgument [
+	| first last |
+	aHeightArgument logToPackageBeacon.
+"	first := anIconAnnotation bar
+			ifNil: [ anIconAnnotation bar stopPosition ]
+			ifNotNil: [ anIconAnnotation parent
+					in: [ :aParent | 
+						aParent startPosition + aParent left size + aParent name size
+							+ aParent colon size ] ].
+	last := anIconAnnotation parent right startPosition.
+	self text
+		attribute: (BrTextCursorAttribute new
+				enterAction: [ :editor | 'entered height' logToPackageBeacon ];
+				leaveAction: [ :editor | 'left height' logToPackageBeacon ])
+		from: first
+		to: last"
+]
+
+{ #category : #generated }
+LeIconsStylerVisitor >> styleSelectorCursorAttribute2: anIconAnnotation [
 	| first last |
 	first := anIconAnnotation parent
 			in: [ :aParent | 
@@ -131,12 +150,49 @@ LeIconsStylerVisitor >> styleSelectorCursorAttribute: anIconAnnotation [
 ]
 
 { #category : #generated }
+LeIconsStylerVisitor >> styleSelectorCursorAttribute: aSelectorArgument [
+	| first last |
+	aSelectorArgument logToPackageBeacon.
+"	first := anIconAnnotation parent
+			in: [ :aParent | 
+				aParent startPosition + aParent left size + aParent name size
+					+ aParent colon size - 1 ].
+	last := anIconAnnotation bar
+			ifNil: [ anIconAnnotation bar startPosition ]
+			ifNotNil: [ anIconAnnotation parent right startPosition ].
+	self text
+		attribute: (BrTextCursorAttribute new
+				enterAction: [ :editor | 'entered selector' logToPackageBeacon ];
+				leaveAction: [ :editor | 'left selector' logToPackageBeacon ])
+		from: first
+		to: last"
+]
+
+{ #category : #generated }
 LeIconsStylerVisitor >> visitAnnotation: anIconAnnotation [
 	anIconAnnotation logToPackageBeacon.
 	"self styleAnnotation: anIconAnnotation."
 	self styleAutoHidingAnnotation: anIconAnnotation.
-	self styleSelectorCursorAttribute: anIconAnnotation.
-	self styleHeightCursorAttribute: anIconAnnotation.
+"	self styleSelectorCursorAttribute2: anIconAnnotation.
+	self styleHeightCursorAttribute2: anIconAnnotation."
 	self styleButton: anIconAnnotation.
 	"self styleExpandingObject: anIconAnnotation"
+]
+
+{ #category : #generated }
+LeIconsStylerVisitor >> visitHeightArgument: aHeightArgument [
+	self styleHeightCursorAttribute: aHeightArgument.
+	^ self visitArgument: aHeightArgument
+]
+
+{ #category : #generated }
+LeIconsStylerVisitor >> visitSelectorArgument: aSelectorArgument [
+	self styleSelectorCursorAttribute: aSelectorArgument.
+	^ self visitArgument: aSelectorArgument
+]
+
+{ #category : #visiting }
+LeIconsStylerVisitor >> visitSmaCCError: aSmaCCError [
+	aSmaCCError logToBeacon.
+	^ self visitSmaCCParseNode: aSmaCCError
 ]
