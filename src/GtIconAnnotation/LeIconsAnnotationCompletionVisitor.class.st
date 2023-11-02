@@ -48,8 +48,8 @@ LeIconsAnnotationCompletionVisitor >> visitAnnotation: anAnnotation [
 			and: [ self composite position < selectorEnd ].
 
 	isCursorInsideSelector
-		ifTrue: [ completion := LeIconSelectorCompletionResult
-					forSelector: (selectorBegin  to: selectorEnd) ]
+		ifTrue: [" completion := LeIconSelectorCompletionResult
+					forSelector: (selectorBegin  to: selectorEnd)" ]
 		ifFalse: [ completion := LeIconHeightCompletionResult
 					forHeight: {(heightBegin to: heightEnd).currentSelector} ].
 	^ self composite completionResult: completion

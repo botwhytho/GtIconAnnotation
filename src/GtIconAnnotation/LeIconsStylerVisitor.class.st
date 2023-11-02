@@ -1,15 +1,16 @@
 Class {
 	#name : #LeIconsStylerVisitor,
 	#superclass : #LeAnnotationStylerVisitor,
-	#traits : 'TLeIconParseNodeVisitor',
-	#classTraits : 'TLeIconParseNodeVisitor classTrait',
+	#traits : 'TLeIconParseNodeVisitor + TSmaCCComponentVisitor',
+	#classTraits : 'TLeIconParseNodeVisitor classTrait + TSmaCCComponentVisitor classTrait',
 	#category : #GtIconAnnotation
 }
 
 { #category : #initialization }
 LeIconsStylerVisitor class >> initialize [
 	super initialize.
-	LeSnippetStylerVisitor addStyler: self
+	LeSnippetStylerVisitor addStyler: self.
+	LeContentCompletionVisitor additionalCompletionVisitors add: self
 ]
 
 { #category : #initialization }
@@ -97,13 +98,8 @@ LeIconsStylerVisitor >> styleExpandingObject: anExternalFileReferenceAnnotation 
 { #category : #generated }
 LeIconsStylerVisitor >> styleHeightCursorAttribute2: anIconAnnotation [
 	| first last |
-	first := anIconAnnotation bar
-			ifNil: [ anIconAnnotation bar stopPosition ]
-			ifNotNil: [ anIconAnnotation parent
-					in: [ :aParent | 
-						aParent startPosition + aParent left size + aParent name size
-							+ aParent colon size ] ].
-	last := anIconAnnotation parent right startPosition.
+	first := anIconAnnotation bar startPosition.
+	last := anIconAnnotation parent right startPosition -1.
 	self text
 		attribute: (BrTextCursorAttribute new
 				enterAction: [ :editor | 'entered height' logToPackageBeacon ];
@@ -134,13 +130,36 @@ LeIconsStylerVisitor >> styleHeightCursorAttribute: aHeightArgument [
 { #category : #generated }
 LeIconsStylerVisitor >> styleSelectorCursorAttribute2: anIconAnnotation [
 	| first last |
-	first := anIconAnnotation parent
+	first := anIconAnnotation parent in: [ :aParent | aParent colon startPosition ].
+	last := anIconAnnotation bar
+			ifNotNil: [ anIconAnnotation bar startPosition - 1 ]
+			ifNil: [ anIconAnnotation parent right startPosition - 1 ].
+	self text
+		attribute: (BrTextCursorAttribute new
+				enterAction: [ :editor | 
+					'entered selector' logToPackageBeacon.
+					self composite
+						completionResult: (LeIconSelectorCompletionResult forSelector: (first to: last)) ];
+				leaveAction: [ :editor | 'left selector' logToPackageBeacon ])
+		from: first
+		to: last	"
+				ifTrue: [ completion := LeIconSelectorCompletionResult
+					forSelector: (selectorBegin  to: selectorEnd) ]
+		ifFalse: [ completion := LeIconHeightCompletionResult
+					forHeight: {(heightBegin to: heightEnd).currentSelector} ]."
+]
+
+{ #category : #generated }
+LeIconsStylerVisitor >> styleSelectorCursorAttribute: aSelectorArgument [
+	| first last |
+	"aSelectorArgument logToPackageBeacon."
+	first := aSelectorArgument parent
 			in: [ :aParent | 
 				aParent startPosition + aParent left size + aParent name size
 					+ aParent colon size - 1 ].
-	last := anIconAnnotation bar
-			ifNil: [ anIconAnnotation bar startPosition ]
-			ifNotNil: [ anIconAnnotation parent right startPosition ].
+	last := aSelectorArgument bar
+			ifNil: [ aSelectorArgument bar startPosition ]
+			ifNotNil: [ aSelectorArgument parent right startPosition ].
 	self text
 		attribute: (BrTextCursorAttribute new
 				enterAction: [ :editor | 'entered selector' logToPackageBeacon ];
@@ -150,31 +169,12 @@ LeIconsStylerVisitor >> styleSelectorCursorAttribute2: anIconAnnotation [
 ]
 
 { #category : #generated }
-LeIconsStylerVisitor >> styleSelectorCursorAttribute: aSelectorArgument [
-	| first last |
-	aSelectorArgument logToPackageBeacon.
-"	first := anIconAnnotation parent
-			in: [ :aParent | 
-				aParent startPosition + aParent left size + aParent name size
-					+ aParent colon size - 1 ].
-	last := anIconAnnotation bar
-			ifNil: [ anIconAnnotation bar startPosition ]
-			ifNotNil: [ anIconAnnotation parent right startPosition ].
-	self text
-		attribute: (BrTextCursorAttribute new
-				enterAction: [ :editor | 'entered selector' logToPackageBeacon ];
-				leaveAction: [ :editor | 'left selector' logToPackageBeacon ])
-		from: first
-		to: last"
-]
-
-{ #category : #generated }
 LeIconsStylerVisitor >> visitAnnotation: anIconAnnotation [
 	anIconAnnotation logToPackageBeacon.
 	"self styleAnnotation: anIconAnnotation."
 	self styleAutoHidingAnnotation: anIconAnnotation.
-"	self styleSelectorCursorAttribute2: anIconAnnotation.
-	self styleHeightCursorAttribute2: anIconAnnotation."
+	self styleSelectorCursorAttribute2: anIconAnnotation.
+	self styleHeightCursorAttribute2: anIconAnnotation.
 	self styleButton: anIconAnnotation.
 	"self styleExpandingObject: anIconAnnotation"
 ]

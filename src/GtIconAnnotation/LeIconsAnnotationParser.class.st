@@ -6,7 +6,7 @@ Class {
 
 { #category : #'generated-accessing' }
 LeIconsAnnotationParser class >> cacheId [
-	^'2023-10-31T18:00:36.462176-04:00'
+	^'2023-11-02T02:15:08.867103-04:00'
 ]
 
 { #category : #generated }
@@ -28,15 +28,18 @@ LeIconsAnnotationParser class >> definitionComment [
 <unarySelector>
 	: (<isLetter> | _ ) ( <isLetter> | _ | <isDigit> ) *
 	;
+<labelText>
+	: [^\|\}]+
+	;
 
 Annotation 
-	: Selector 'item' (""|"" 'bar' Height 'item')? {{}}
+	: Selector 'item' (""|"" 'bar' Height 'item')?  {{}}
 	;
 Selector
 	: (""selector"" 'name' ""="" 'equals')? <unarySelector> 'value' {{SelectorArgument}}
 	;
 Height
-	: ""height"" 'name' ""="" 'equals' <integer> 'value' {{HeightArgument}}
+	: (""height"" 'name' ""="" 'equals')? <integer> 'value' {{HeightArgument}}
 	;"
 ]
 
@@ -57,11 +60,12 @@ LeIconsAnnotationParser class >> obsolete [
 { #category : #generated }
 LeIconsAnnotationParser class >> reduceTable [
 ^#(
-	#(9 1 #reduceActionForSelector1: 278529 false) 
-	#(8 1 #reduceActionForAnnotation1: 210945 false) 
-	#(9 3 #reduceActionForSelector2: 278530 false) 
-	#(8 3 #reduceActionForAnnotation2: 210946 false) 
-	#(10 3 #reduceActionForHeight1: 374785 false)
+	#(9 1 #reduceActionForSelector1: 307201 false) 
+	#(8 1 #reduceActionForAnnotation1: 238593 false) 
+	#(9 3 #reduceActionForSelector2: 307202 false) 
+	#(10 1 #reduceActionForHeight1: 403457 false) 
+	#(8 3 #reduceActionForAnnotation2: 238594 false) 
+	#(10 3 #reduceActionForHeight2: 403458 false)
 	).
 ]
 
@@ -94,12 +98,13 @@ LeIconsAnnotationParser class >> transitionTable [
 #[0 0 0 0 11] 
 #[1 0 29 0 4 0 10 0 11] 
 #[0 0 33 0 6] 
-#[1 0 37 0 2 0 41 0 10] 
+#[1 0 37 0 2 0 41 0 5 0 45 0 10] 
 #[0 0 14 0 4 0 11] 
-#[0 0 45 0 1] 
+#[0 0 49 0 1] 
 #[0 0 18 0 11] 
-#[0 0 49 0 5] 
-#[0 0 22 0 11]
+#[0 0 22 0 11] 
+#[0 0 53 0 5] 
+#[0 0 26 0 11]
 	).
 ]
 
@@ -123,6 +128,14 @@ LeIconsAnnotationParser >> reduceActionForAnnotation2: nodes [
 
 { #category : #'generated-reduction actions' }
 LeIconsAnnotationParser >> reduceActionForHeight1: nodes [
+	| result |
+	result := LeIconHeightArgumentNode new.
+	result value: (nodes at: 1).
+	^ result
+]
+
+{ #category : #'generated-reduction actions' }
+LeIconsAnnotationParser >> reduceActionForHeight2: nodes [
 	| result |
 	result := LeIconHeightArgumentNode new.
 	result name: (nodes at: 1).
